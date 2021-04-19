@@ -27,7 +27,7 @@ namespace RaspberryCam.IO
                 return result;
             }
 
-            var d = Joystick.Events.Select(GetStatus);
+            var d = Joystick.Events.Select(GetStatus).Subscribe();
             using (d)
             {
                 Console.WriteLine("Press joystick to take a picture");
