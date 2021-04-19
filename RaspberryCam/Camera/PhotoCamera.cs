@@ -2,6 +2,8 @@
 using MMALSharp.Common;
 using MMALSharp.Handlers;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace RaspberryCam.Camera
