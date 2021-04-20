@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RaspberryCam.Utilities;
+using System;
 using System.Device.Gpio;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,14 +8,13 @@ namespace RaspberryCam.IO
 {
     class JoystickReader
     {
-        private const int PIN_BUTTON = 26;
         public void ReadJoystick(CancellationToken cancellationToken, Action callback)
         {
 
 
+            GpioController gpioController = GpioControllerFactory.GetController();
 
-            GpioController gpioController = new GpioController();
-            gpioController.OpenPin(PIN_BUTTON, PinMode.Input);
+            gpioController.OpenPin(Constants.PIN_BUTTON, PinMode.Input);
             var lastValue = PinValue.Low;
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             Task.Run(
@@ -22,7 +22,7 @@ namespace RaspberryCam.IO
                 {
                     while(!cancellationToken.IsCancellationRequested)
                     {
-                        var readValue = gpioController.Read(PIN_BUTTON);
+                        var readValue = gpioController.Read(Constants.PIN_BUTTON);
                         
                         if(readValue != lastValue)
                         {
