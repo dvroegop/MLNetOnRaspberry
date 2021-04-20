@@ -56,10 +56,11 @@ namespace RaspberryCam.Camera
             Initialize();
             using(var imgCaptureHandler = new ImageStreamCaptureHandler("/home/pi/images/", "jpg"))
             {
+                
                 // We need to wait for 2 seconds, to give the camera the time to adjust 
                 await Task.Delay(2000);
 
-                await _camera.TakePicture(imgCaptureHandler, MMALEncoding.JPEG, MMALEncoding.I420);
+                await _camera.TakePicture(imgCaptureHandler, MMALEncoding.JPEG, MMALEncoding.I420);                
             }
         }
         #endregion
@@ -73,6 +74,9 @@ namespace RaspberryCam.Camera
             {
                 Console.WriteLine("Initializing camera");
                 MMALCameraConfig.StillResolution = new MMALSharp.Common.Utility.Resolution(640, 480);
+                MMALCameraConfig.Flips = MMALSharp.Native.MMAL_PARAM_MIRROR_T.MMAL_PARAM_MIRROR_VERTICAL;
+
+
                 _camera = MMALCamera.Instance;
             }
 

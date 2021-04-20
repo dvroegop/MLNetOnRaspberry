@@ -8,8 +8,8 @@ namespace RaspberryCam
     {
         public const int PIN_BUTTON = 26;
         public const int PIN_LEDBLUE = 13;
-        public const int PIN_LEDRED = 6;
-        public const int PIN_LEDGREEN = 5;
+        public const int PIN_LEDRED = 5;
+        public const int PIN_LEDGREEN = 6;
         public const int PIN_BUZZER = 12;
 
         

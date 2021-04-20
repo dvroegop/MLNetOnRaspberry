@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Device.Gpio;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace RaspberryCam.Utilities
 {
@@ -35,6 +36,8 @@ namespace RaspberryCam.Utilities
                 LedColor.Blue => Constants.PIN_LEDBLUE,
                 _ => throw new NotImplementedException(),
             };
+
+            _controller.OpenPin(_pinNumber, PinMode.Output);
         }
 
 
@@ -45,6 +48,12 @@ namespace RaspberryCam.Utilities
 
         public void Off()
         {
+            _controller.Write(_pinNumber, PinValue.Low);
+        }
+
+        public void Flash(int delay=100) {
+            _controller.Write(_pinNumber, PinValue.High);
+            Task.Delay(delay).Wait();
             _controller.Write(_pinNumber, PinValue.Low);
         }
     }

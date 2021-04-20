@@ -1,9 +1,9 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using RaspberryCam.Camera;
+﻿using RaspberryCam.Camera;
 using RaspberryCam.IO;
 using RaspberryCam.Utilities;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace RaspberryCam
 {
@@ -41,10 +41,12 @@ namespace RaspberryCam
                     cts.Token,
                     () =>
                     {
+                        buzzer.Buzz();
                         camera.TakePicture().Wait(cts.Token);
                         Console.WriteLine("Taken the picture.. I hope..");
+                        ledBlue.Flash();
                     }
-                        )            ;
+                        );
 
 
                 Console.WriteLine("Press the button to take a picture");
