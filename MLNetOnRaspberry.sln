@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31129.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaspberryCam", "RaspberryCam\RaspberryCam.csproj", "{48C066E9-6675-4C34-9A04-098D2208FA05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RaspberryCam", "RaspberryCam\RaspberryCam.csproj", "{48C066E9-6675-4C34-9A04-098D2208FA05}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tester", "Tester\Tester.csproj", "{952D3504-F20F-4A74-ABD8-2CEBEA2EA38E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CapDetector", "CapDetector\CapDetector.csproj", "{1195E6D6-F866-427B-8084-52E6A865ECFF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{48C066E9-6675-4C34-9A04-098D2208FA05}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48C066E9-6675-4C34-9A04-098D2208FA05}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48C066E9-6675-4C34-9A04-098D2208FA05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{952D3504-F20F-4A74-ABD8-2CEBEA2EA38E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{952D3504-F20F-4A74-ABD8-2CEBEA2EA38E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{952D3504-F20F-4A74-ABD8-2CEBEA2EA38E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{952D3504-F20F-4A74-ABD8-2CEBEA2EA38E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1195E6D6-F866-427B-8084-52E6A865ECFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1195E6D6-F866-427B-8084-52E6A865ECFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1195E6D6-F866-427B-8084-52E6A865ECFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1195E6D6-F866-427B-8084-52E6A865ECFF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

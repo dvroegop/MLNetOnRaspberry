@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RaspberryCam.Camera
 {
-    class PhotoCamera : IAsyncDisposable
+    class PhotoCamera : IAsyncDisposable, IDisposable
     {
         #region Private members
         private MMALCamera _camera;
@@ -17,6 +17,12 @@ namespace RaspberryCam.Camera
 
 
         #region Housekeeping
+
+        public void Dispose()
+        {
+            DisposeAsync(true).Wait();
+            GC.SuppressFinalize(this);
+        }
 
 
         protected async Task DisposeAsync(bool isDisposing)
@@ -48,7 +54,13 @@ namespace RaspberryCam.Camera
         public async Task TakePicture()
         {
             Initialize();
-            await _camera.TakePicture(_imgCaptureHandler, MMALEncoding.JPEG, MMALEncoding.I420);
+            using(var imgCaptureHandler = new ImageStreamCaptureHandler("/home/pi/images/", "jpg"))
+            {
+                // We need to wait for 2 seconds, to give the camera the time to adjust 
+                await Task.Delay(2000);
+
+                await _camera.TakePicture(imgCaptureHandler, MMALEncoding.JPEG, MMALEncoding.I420);
+            }
         }
         #endregion
 
@@ -59,14 +71,16 @@ namespace RaspberryCam.Camera
 
             if (_camera == null)
             {
+                Console.WriteLine("Initializing camera");
                 MMALCameraConfig.StillResolution = new MMALSharp.Common.Utility.Resolution(640, 480);
                 _camera = MMALCamera.Instance;
             }
 
-            if (_imgCaptureHandler == null)
-            {
-                _imgCaptureHandler = new ImageStreamCaptureHandler("/home/pi/images/", "jpg");
-            }
+        //    if (_imgCaptureHandler == null)
+        //    {
+        //        Console.WriteLine("Initializing capture handler");
+        //        _imgCaptureHandler = new ImageStreamCaptureHandler("/home/pi/images/", "jpg");
+        //    }
         }
         #endregion
     }
