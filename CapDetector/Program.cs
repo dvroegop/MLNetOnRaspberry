@@ -47,7 +47,16 @@ namespace CapDetector
         }
         static void HandleButtonPress()
         {
-            //_camera.
+            _camera.TakePicture(
+                () =>
+                {
+                    _ledBlue.On();
+                },
+                (fileName) =>
+                {
+                    _ledBlue.Off
+                    return;
+                }).Wait();
         }
     }
 }

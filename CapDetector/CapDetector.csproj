@@ -14,8 +14,4 @@
     <PackageReference Include="System.Device.Gpio" Version="1.4.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\MLNetOnRaspberryML.Model\MLNetOnRaspberryML.Model.csproj" />
-  </ItemGroup>
-
 </Project>
