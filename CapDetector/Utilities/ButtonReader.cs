@@ -7,34 +7,54 @@ namespace CapDetector.Utilities
 {
     class ButtonReader
     {
-        public void ReadButton(CancellationToken cancellationToken, Action callback)
+
+        private Action<bool> _callBack;
+        private bool _isPressed;
+
+        public bool IsPressed
         {
+            get
+            {
+                if (_isPressed)
+                {
+                    _isPressed = false;
+                    _callBack?.Invoke(true);
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        public void ReadButton(CancellationToken cancellationToken, Action<bool> callback)
+        {
+            _callBack = callback;
             GpioController gpioController = GpioControllerFactory.GetController();
 
             gpioController.OpenPin(Constants.PIN_BUTTON, PinMode.Input);
-            var lastValue = PinValue.Low;
+            PinValue lastValue = PinValue.Low;
 
             Task.Run(
                 () =>
                 {
-                    while(!cancellationToken.IsCancellationRequested)
+                    while (!cancellationToken.IsCancellationRequested)
                     {
-                        var readValue = gpioController.Read(Constants.PIN_BUTTON);
-                        
-                        if(readValue != lastValue)
+                        PinValue readValue = gpioController.Read(Constants.PIN_BUTTON);
+
+                        if (readValue != lastValue)
                         {
-                            if(readValue == PinValue.High)
+                            if (readValue == PinValue.High)
                             {
                                 // We clicked...
                                 Console.WriteLine("Calling the callback.");
-                                callback?.Invoke();
+                                _isPressed = true;
                             }
 
                             lastValue = readValue;
                         }
                         Task.Delay(10, cancellationToken).Wait();
                     }
-                },cancellationToken);
+                }, cancellationToken);
         }
+
     }
 }

@@ -22,16 +22,16 @@ namespace CapDetector.Utilities
             using (var imgCaptureHandler = new ImageStreamCaptureHandler("/home/pi/images/", "jpg"))
             {
 
+                beforePictureCallback?.Invoke();
                 // We need to wait for 2 seconds the first time this is called, to give the camera the time to adjust 
-                if(_firstRun)
+                if (_firstRun)
                 {
                     await Task.Delay(2000);
                     _firstRun = false;
                 }
 
-                beforePictureCallback?.Invoke();
                 await _camera.TakePicture(imgCaptureHandler, MMALEncoding.JPEG, MMALEncoding.I420);
-                var fileName = imgCaptureHandler.CurrentFilename;
+                var fileName = imgCaptureHandler.GetFilename();
                 afterPictureCallback?.Invoke(fileName);
                 System.IO.File.Delete(fileName);
             }
