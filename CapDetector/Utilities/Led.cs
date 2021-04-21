@@ -1,28 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Device.Gpio;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CapDetector.Utilities
 {
-    class Led
+    class Led : IDisposable
     {
-        private readonly LedColor color;
+
         private GpioController _controller;
         private int _pinNumber;
-
-        public enum LedColor
-        {
-            Red,
-            Green,
-            Blue
-        }
-        public enum Mode
-        {
-            On,
-            Off
-        }
+        private readonly LedColor color;
 
         public Led(LedColor color)
         {
@@ -40,21 +27,51 @@ namespace CapDetector.Utilities
             _controller.OpenPin(_pinNumber, PinMode.Output);
         }
 
+        public void Off()
+        {
+            _controller.Write(_pinNumber, PinValue.Low);
+        }
+
 
         public void On()
         {
             _controller.Write(_pinNumber, PinValue.High);
         }
 
-        public void Off()
+        public void Flash(int delay = 100, int counter = 1)
         {
-            _controller.Write(_pinNumber, PinValue.Low);
+            Task.Run(() =>
+            {
+                for (int i = 0; i < counter; i++)
+                {
+                    On();
+                    Task.Delay(delay).Wait();
+                    Off();
+                    Task.Delay(delay).Wait();
+                }
+            });
         }
 
-        public void Flash(int delay=100) {
-            _controller.Write(_pinNumber, PinValue.High);
-            Task.Delay(delay).Wait();
-            _controller.Write(_pinNumber, PinValue.Low);
+        public void Dispose()
+        {
+            // I know this is not a good example of using IDisposable,
+            // but hey, it's a demo.. I can do whatever I want ;-)
+            // Dennis
+
+            _controller.ClosePin(_pinNumber);
         }
+
+        public enum LedColor
+        {
+            Red,
+            Green,
+            Blue
+        }
+        public enum Mode
+        {
+            On,
+            Off
+        }
+
     }
 }

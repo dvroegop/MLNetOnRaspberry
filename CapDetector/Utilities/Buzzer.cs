@@ -1,30 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Device.Gpio;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CapDetector.Utilities
 {
-    class Buzzer
+    class Buzzer : IDisposable
     {
+        private GpioController _controller;
+
+        public Buzzer()
+        {
+            _controller = GpioControllerFactory.GetController();
+            _controller.OpenPin(Constants.PIN_BUZZER, System.Device.Gpio.PinMode.Output);
+        }
         public void Buzz()
         {
-            var controller = GpioControllerFactory.GetController();
-
             Task.Run(
                 () =>
                 {
-                    controller.OpenPin(Constants.PIN_BUZZER, System.Device.Gpio.PinMode.Output);
-
-                    controller.Write(Constants.PIN_BUZZER, PinValue.High);
+                    _controller.Write(Constants.PIN_BUZZER, PinValue.High);
                     Task.Delay(1000).Wait();
-                    controller.Write(Constants.PIN_BUZZER, PinValue.Low);
-
-                    controller.ClosePin(Constants.PIN_BUZZER);
-
+                    _controller.Write(Constants.PIN_BUZZER, PinValue.Low);
                 });
 
         }
+
+            public void Dispose()
+            {
+                // I know this is not a good example of using IDisposable,
+                // but hey, it's a demo.. I can do whatever I want ;-)
+                // Dennis
+
+                _controller.ClosePin(Constants.PIN_BUZZER);
+            }
+
     }
 }

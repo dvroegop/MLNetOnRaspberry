@@ -5,12 +5,20 @@ using System.Threading.Tasks;
 
 namespace CapDetector.Utilities
 {
-    class ButtonReader
+    class ButtonReader: IDisposable
     {
 
         private Action<bool> _callBack;
         private bool _isPressed;
+        private GpioController _controller;
 
+        public ButtonReader()
+        {
+            _controller = GpioControllerFactory.GetController();
+
+            _controller.OpenPin(Constants.PIN_BUTTON, PinMode.Input);
+
+        }
         public bool IsPressed
         {
             get
@@ -18,6 +26,7 @@ namespace CapDetector.Utilities
                 if (_isPressed)
                 {
                     _isPressed = false;
+                    Console.WriteLine("Calling the callback after button press..");
                     _callBack?.Invoke(true);
                     return true;
                 }
@@ -25,12 +34,18 @@ namespace CapDetector.Utilities
             }
         }
 
+        public void Dispose()
+        {
+            // I know this is not a good example of using IDisposable,
+            // but hey, it's a demo.. I can do whatever I want ;-)
+            // Dennis
+
+            _controller.ClosePin(Constants.PIN_BUTTON);
+        }
+
         public void ReadButton(CancellationToken cancellationToken, Action<bool> callback)
         {
             _callBack = callback;
-            GpioController gpioController = GpioControllerFactory.GetController();
-
-            gpioController.OpenPin(Constants.PIN_BUTTON, PinMode.Input);
             PinValue lastValue = PinValue.Low;
 
             Task.Run(
@@ -38,14 +53,14 @@ namespace CapDetector.Utilities
                 {
                     while (!cancellationToken.IsCancellationRequested)
                     {
-                        PinValue readValue = gpioController.Read(Constants.PIN_BUTTON);
+                        PinValue readValue = _controller.Read(Constants.PIN_BUTTON);
 
                         if (readValue != lastValue)
                         {
                             if (readValue == PinValue.High)
                             {
                                 // We clicked...
-                                Console.WriteLine("Calling the callback.");
+                                 _callBack?.Invoke(true);
                                 _isPressed = true;
                             }
 
