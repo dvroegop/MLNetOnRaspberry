@@ -2,30 +2,38 @@
 using MMALSharp.Common;
 using MMALSharp.Handlers;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RaspberryCam.Camera
+namespace CapDetector.Utilities
 {
     class PhotoCamera
     {
         #region Private members
         private MMALCamera _camera;
+        private bool _firstRun = true;
         #endregion
 
 
         #region Public methods
-        public async Task TakePicture()
+        public async Task TakePicture(Action beforePictureCallback, Action<string> afterPictureCallback)
         {
             Initialize();
-            using(var imgCaptureHandler = new ImageStreamCaptureHandler("/home/pi/images/", "jpg"))
+            using (var imgCaptureHandler = new ImageStreamCaptureHandler("/home/pi/images/", "jpg"))
             {
-                
-                // We need to wait for 2 seconds, to give the camera the time to adjust 
-                await Task.Delay(2000);
 
-                await _camera.TakePicture(imgCaptureHandler, MMALEncoding.JPEG, MMALEncoding.I420);                
+                // We need to wait for 2 seconds the first time this is called, to give the camera the time to adjust 
+                if(_firstRun)
+                {
+                    await Task.Delay(2000);
+                    _firstRun = false;
+                }
+
+                beforePictureCallback?.Invoke();
+                await _camera.TakePicture(imgCaptureHandler, MMALEncoding.JPEG, MMALEncoding.I420);
+                var fileName = imgCaptureHandler.CurrentFilename;
+                afterPictureCallback?.Invoke(fileName);
+                System.IO.File.Delete(fileName);
             }
         }
         #endregion
