@@ -14,21 +14,12 @@ namespace CapDetector
         static Led _ledGreen;
         static Led _ledRed;
 
-        static void HandleButtonPress()
-        {
-            _ledBlue.On();
-            TestML();
-            _ledBlue.Off();
-        }
-
         static void Main(string[] args)
-        {
-            Console.WriteLine("Setting up the button handler");
-
+        {            
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
-            var buttonReader = new ButtonReader();
-            buttonReader.ReadButton(cancellationTokenSource.Token, TestML);
+            var buttonReader = new ButtonReader(RunMachineLearningCode);
+            buttonReader.ReadButton(cancellationTokenSource.Token);
 
             _ledRed = new Led(Led.LedColor.Red);
             _ledGreen = new Led(Led.LedColor.Green);
@@ -51,12 +42,13 @@ namespace CapDetector
                 {
                     _ledBlue.On();
 
-                    TestML(false);
+                    RunMachineLearningCode(false);
                     _ledBlue.Off();
 
                     Task.Delay(2000).Wait();
                 }
-            } finally
+            } 
+            finally
             {
                 cancellationTokenSource.Cancel();
 
@@ -72,15 +64,16 @@ namespace CapDetector
                 _ledBlue.Dispose();
             }
         }
-        private static void TestML(bool simulateLatFriday = false)
+        private static void RunMachineLearningCode(bool simulateLateFriday = false)
         {
-            //if(simulateLatFriday)
+            //if (simulateLateFriday)
             //    _ledGreen.Flash(500, 5);
             //else
             //    _ledRed.Flash(250, 10);
 
+            #region Actual demo
             ModelInput inputData;
-            if (simulateLatFriday)
+            if (simulateLateFriday)
             {
                 inputData = new ModelInput { Time = @"17:00", DayOfWeek = 5F, DidTeamWin = 1F, };
             }
@@ -89,9 +82,9 @@ namespace CapDetector
                 string workTime = DateTime.Now.AddHours(-4).ToString("HH:mm");
 
                 inputData = new ModelInput { Time = workTime, DayOfWeek = 1F, DidTeamWin = 0F, };
-            }            
+            }
             ModelOutput predictionResult = ConsumeModel.Predict(inputData);
-            var workingDay = simulateLatFriday ? "Friday" : "a normal day";
+            var workingDay = simulateLateFriday ? "Friday" : "a normal day";
             Console.WriteLine($"Result from working on {workingDay} has {predictionResult.Score} bolts per 5 minutes");
 
             if (predictionResult.Score < 10.0f)
@@ -105,6 +98,7 @@ namespace CapDetector
                 Console.WriteLine("Pass");
                 _ledGreen.Flash(200, 2);
             }
+            #endregion
         }
 
     }

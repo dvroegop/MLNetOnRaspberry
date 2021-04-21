@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MMALSharp" Version="0.6.0" />
     <PackageReference Include="System.Device.Gpio" Version="1.4.0" />
   </ItemGroup>
 

@@ -10,10 +10,12 @@ namespace CapDetector.Utilities
 
         private Action<bool> _callBack;
         private bool _isPressed;
-        private GpioController _controller;
+        private readonly GpioController _controller;
 
-        public ButtonReader()
+        public ButtonReader(Action<bool> callback)
         {
+            _callBack = callback;
+
             _controller = GpioControllerFactory.GetController();
 
             _controller.OpenPin(Constants.PIN_BUTTON, PinMode.Input);
@@ -43,9 +45,8 @@ namespace CapDetector.Utilities
             _controller.ClosePin(Constants.PIN_BUTTON);
         }
 
-        public void ReadButton(CancellationToken cancellationToken, Action<bool> callback)
-        {
-            _callBack = callback;
+        public void ReadButton(CancellationToken cancellationToken)
+        {            
             PinValue lastValue = PinValue.Low;
 
             Task.Run(

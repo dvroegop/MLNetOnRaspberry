@@ -8,12 +8,11 @@ namespace CapDetector.Utilities
     {
 
         private GpioController _controller;
-        private int _pinNumber;
-        private readonly LedColor color;
+        private readonly int _pinNumber;
 
         public Led(LedColor color)
         {
-            this.color = color;
+            
             _controller = GpioControllerFactory.GetController();
 
             _pinNumber = color switch
@@ -31,7 +30,6 @@ namespace CapDetector.Utilities
         {
             _controller.Write(_pinNumber, PinValue.Low);
         }
-
 
         public void On()
         {

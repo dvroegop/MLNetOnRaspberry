@@ -6,7 +6,7 @@ namespace CapDetector.Utilities
 {
     class Buzzer : IDisposable
     {
-        private GpioController _controller;
+        private readonly GpioController _controller;
 
         public Buzzer()
         {
