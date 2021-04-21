@@ -9,6 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MLNetOnRaspberryML.Model", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MLNetOnRaspberryML.ConsoleApp", "MLNetOnRaspberryML.ConsoleApp\MLNetOnRaspberryML.ConsoleApp.csproj", "{9CD7B43C-5CF2-4D6A-BBA0-73627462A83E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SourceData", "SourceData", "{B16A67B0-D8AC-4C48-AB4B-C7AC9ACCF8A9}"
+	ProjectSection(SolutionItems) = preProject
+		D:\Temp\data.csv = D:\Temp\data.csv
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
